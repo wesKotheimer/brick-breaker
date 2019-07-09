@@ -24,6 +24,10 @@ void draw() {
   shape(paddle);
   shape(ball);
   moveBall();
+  if(mousePressed) trackMouse();
+  
+  if(vely > 0 && vely < 15) vely += .005;
+  else if(vely < 0 && vely > -15) vely -= .005;
 }
 
 /* 
@@ -32,7 +36,7 @@ void draw() {
     - if the left arrow key or the 'a' key are pressed, move the paddle to the left
 */
 void keyPressed() {
-  if((keyCode == RIGHT || key == 'd') && x < width - 75) {
+  if((keyCode == RIGHT || key == 'd') && x + paddleWidth < width) {
     paddle.translate(10,0);
     x += 10;
   }
@@ -44,10 +48,10 @@ void keyPressed() {
 
 // Create a rectangle 50 pixels from the bottom of the window, in the center
 void createRectangle() {
-  y = height - 50;
-  x = (width / 2) - 37.5;
   paddleWidth = 100;
   paddleHeight = 25;
+  y = height - 50;
+  x = (width / 2) - paddleWidth / 2;
   fill(0);
   paddle = createShape(RECT, x, y, paddleWidth, paddleHeight);
 }
@@ -84,4 +88,12 @@ void moveBall() {
   ball.translate(velx, vely);
   ballx += velx;
   bally += vely;
+}
+
+void trackMouse() {
+  if(mouseX - (paddleWidth/2) > 0 && mouseX + (paddleWidth/2) < width) {
+    println("HERE");
+    paddle.translate(mouseX - (paddleWidth/2) - x, 0);
+    x = mouseX - (paddleWidth/2);
+  }
 }
